@@ -1,0 +1,16 @@
+version: v1,
+tasks:
+  - ref: npm-build
+    params:
+      - name: context-dir
+        value: ./
+      - name: node-version
+        value: "16"
+      - name: sonar-parameter-overrides
+        value: "-Dsonar.coverage.exclusions='src/app*.module.ts,src/app/**/*.module.ts,src/environments/environment*.ts,src/mocks/**/**/*mock.ts,**/config/config*.js,*.conf.js,src/test.ts/src/main.ts,src/polyfills.ts'"
+  - ref: container-image-build
+    runAfter:
+      - npmbuild
+  - ref: helm-chart-publish
+    runAfter:
+      - container-image-build
